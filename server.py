@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, jsonify, redirect, url_for, s
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'your_very_secret_key_here'
+app.secret_key = 'd29c234ca310aa6990092d4b6cd4c4854585c51e1f73bf4de510adca03f5bc4e'
 
 # Simulated storage with enhanced fields
 captured_creds = []
